@@ -1,0 +1,54 @@
+service: hackaton-portunol
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+# resources:
+#   Resources:
+    # UserPhotos:
+    #   Type: AWS::S3::Bucket
+    # Users:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #     TableName: Users
+    #     AttributeDefinitions:
+    #       - AttributeName: id
+    #         AttributeType: S
+    #       - AttributeName: name
+    #         AttributeType: S
+    #       - AttributeName: access_token
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: userId
+    #         KeyType: HASH
+    #     BillingMode: PAY_PER_REQUEST
+
+functions:
+  findUserByFace:
+    handler: handlers.findUserByFace
+    memorySize: 128
+    timeout: 20
+    events:
+      - http:
+          path: users/by-face
+          method: post
+          cors: true
+  createUser:
+    handler: handlers.createUser
+    memorySize: 128
+    timeout: 10
+    events:
+      - http:
+          path: users
+          method: post
+          cors: true
+  checkoutOrder:
+    handler: handlers.checkoutOrder
+    memorySize: 128
+    timeout: 15
+    events:
+      - http:
+          path: orders
+          method: post
+          cors: true
