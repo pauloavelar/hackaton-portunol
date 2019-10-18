@@ -5,11 +5,11 @@
 **Date:** 2019-10-17 12:00 - 2019-10-18 10:00  
 **Evaluation:** 3rd/~15
 **Members:**
-* Monique Ribeiro
+* Felipe Oliveira
 * Jose Attento
 * Mariano Santamarina
 * Mario Chanco
-* Renato Dean
-* Felipe Oliveira
+* Monique Ribeiro
 * Paulo Avelar
+* Renato Dean
 * Rodrigo Camparo
