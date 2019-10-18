@@ -3,26 +3,22 @@ service: hackaton-portunol
 provider:
   name: aws
   runtime: nodejs10.x
-
-# resources:
-#   Resources:
-    # UserPhotos:
-    #   Type: AWS::S3::Bucket
-    # Users:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #     TableName: Users
-    #     AttributeDefinitions:
-    #       - AttributeName: id
-    #         AttributeType: S
-    #       - AttributeName: name
-    #         AttributeType: S
-    #       - AttributeName: access_token
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: userId
-    #         KeyType: HASH
-    #     BillingMode: PAY_PER_REQUEST
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+      Resource: 'arn:aws:dynamodb:us-east-1:*:*'
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:PutObject
+      Resource: '*'
+    - Effect: Allow
+      Action:
+        - rekognition:IndexFaces
+        - rekognition:SearchFacesByImage
+      Resource: '*'
 
 functions:
   findUserByFace:
@@ -38,6 +34,9 @@ functions:
     handler: handlers.createUser
     memorySize: 128
     timeout: 10
+    environmentVariables:
+      BUCKET_NAME: portunol-user-photos
+      DYNAMO_TABLE: Users
     events:
       - http:
           path: users

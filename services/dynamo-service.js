@@ -6,6 +6,7 @@ const converter = AWS.DynamoDB.Converter;
 
 module.exports = {
   createUser,
+  searchUser,
 };
 
 function createUser(user) {
@@ -14,3 +15,20 @@ function createUser(user) {
     Item: converter.marshall(user),
   }).promise();
 }
+
+function searchUser(userId) {
+  return dynamo.getItem({
+    TableName: process.env.DYNAMO_TABLE,
+    Key: {
+      id: {
+        S: userId,
+      },
+    },
+  }).promise()
+  .then(user => {
+    if (user && user.Item) {
+      return converter.unmarshall(user.Item);
+    }
+  });
+}
+

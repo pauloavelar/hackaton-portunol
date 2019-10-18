@@ -1,3 +1,5 @@
+const RequestError = require('../errors/request-error');
+
 module.exports = {
   buildHttpResponse,
   buildErrorResponse,
@@ -15,14 +17,11 @@ function buildErrorResponse(error) {
     statusCode: getErrorStatusCode(error),
     body: JSON.stringify({
       error: error.message,
+      stack: error.stack,
     }),
   };
 }
 
 function getErrorStatusCode(error) {
-  if (error instanceof RequestError) {
-    return StatusCodes.REQUEST_ERROR;
-  }
-
-  return StatusCodes.SERVER_ERROR;
+  return error instanceof RequestError ? 400 : 500;
 }
