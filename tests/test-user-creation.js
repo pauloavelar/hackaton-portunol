@@ -1,4 +1,4 @@
-const handlers = require('./handlers');
+const handlers = require('../handlers');
 
 const event = {
   body: JSON.stringify({
