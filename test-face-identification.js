@@ -3,7 +3,7 @@ const handlers = require('./handlers');
 
 const event = {
   body: JSON.stringify({
-    photo: fs.readFileSync('./test5.jpg').toString('base64'),
+    photo: fs.readFileSync('./test6.jpg').toString('base64'),
   }),
 };
 

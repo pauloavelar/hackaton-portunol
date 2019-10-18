@@ -16,6 +16,7 @@ provider:
       Resource: '*'
     - Effect: Allow
       Action:
+        - rekognition:DetectFaces
         - rekognition:IndexFaces
         - rekognition:SearchFacesByImage
       Resource: '*'
@@ -42,12 +43,12 @@ functions:
           path: users
           method: post
           cors: true
-  checkoutOrder:
-    handler: handlers.checkoutOrder
+  playDiscountGame:
+    handler: handlers.playDiscountGame
     memorySize: 128
     timeout: 15
     events:
       - http:
-          path: orders
+          path: discounts
           method: post
           cors: true

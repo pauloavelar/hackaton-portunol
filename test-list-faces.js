@@ -5,4 +5,4 @@ const rekognition = new AWS.Rekognition({
 
 rekognition.listFaces({
   CollectionId: 'portunol-user-faces',
-}).promise().then(console.log);
+}).promise().then(res => console.log(JSON.stringify(res, null, 2)));
