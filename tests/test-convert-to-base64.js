@@ -1,3 +1,3 @@
 const fs = require('fs');
 
-console.log(fs.readFileSync('./test3.jpg').toString('base64'));
+console.log(fs.readFileSync('./rafael.jpg').toString('base64'));
