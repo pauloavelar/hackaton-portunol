@@ -3,7 +3,7 @@
 **Team:** Portuñol  
 **Project:** Checkout with Face Identification (MVP)  
 **Date:** 2019-10-17 12:00 - 2019-10-18 10:00  
-**Evaluation:** 3rd/~15
+**Evaluation:** 3rd/~15  
 **Members:**
 * Felipe Oliveira
 * Jose Attento
