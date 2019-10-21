@@ -1,11 +1,7 @@
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
-module.exports = {
-  uploadImage,
-  getUserImage,
-  getFaceKey,
-};
+module.exports = { uploadImage, getUserImage, getFaceKey };
 
 function uploadImage(userId, image) {
   return s3.upload({
@@ -19,11 +15,12 @@ function getUserImage(userId) {
   return s3.getObject({
     Bucket: process.env.BUCKET_NAME,
     Key: getFaceKey(userId),
-  }).promise().then(async (results) => {
-    if (results && results.Body && results.Body.toString) {
-      return results.Body.toString('base64');
-    }
-  });
+  }).promise()
+    .then(results => {
+      if (results && results.Body && results.Body.toString) {
+        return results.Body.toString('base64');
+      }
+    });
 }
 
 function getFaceKey(userId) {

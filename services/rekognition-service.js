@@ -1,15 +1,11 @@
 const AWS = require('aws-sdk');
 const rekognition = new AWS.Rekognition({
-  region: 'us-east-1',
+  region: process.env.AWS_REGION,
 });
 
 const storageService = require('./storage-service');
 
-module.exports = {
-  addUserFace,
-  findUserByFace,
-  detectEmotions,
-};
+module.exports = { addUserFace, findUserByFace, detectEmotions };
 
 function addUserFace(userId) {
   return rekognition.indexFaces({
@@ -32,25 +28,25 @@ function findUserByFace(photo) {
       Bytes: Buffer.from(photo, 'base64'),
     },
     MaxFaces: 1,
-  }).promise().then(results => {
-    console.log()
-    if (results.FaceMatches && results.FaceMatches[0]) {
-      const match = results.FaceMatches[0];
-      console.log(`Face found. Similarity: ${match.Similarity}%`);
+  }).promise()
+    .then(results => {
+      if (results.FaceMatches && results.FaceMatches[0]) {
+        const match = results.FaceMatches[0];
 
-      if (match.Face && match.Similarity >= (process.env.SIMILARITY_THRESHOLD || 50)) {
-        return {
-          faceFound: true,
-          userId: match.Face.ExternalImageId,
-        };
+        if (match.Face && match.Similarity >= (process.env.SIMILARITY_THRESHOLD || 70)) {
+          return {
+            faceFound: true,
+            userId: match.Face.ExternalImageId,
+          };
+        }
       }
-    }
 
-    return { faceFound: true };
-  }).catch(err => {
-    console.error(`Error recognizing face: ${err.message}`);
-    return { faceFound: false };
-  });
+      return { faceFound: true };
+    })
+    .catch(err => {
+      console.error(`Error recognizing face: ${err.message}`);
+      return { faceFound: false };
+    });
 }
 
 function detectEmotions(photo, emotion) {
@@ -59,10 +55,11 @@ function detectEmotions(photo, emotion) {
     Image: {
       Bytes: Buffer.from(photo, 'base64'),
     },
-  }).promise().then(results => {
-    const face = results.FaceDetails && results.FaceDetails[0];
-    return getEmotion(emotion, face && face.Emotions);
-  });
+  }).promise()
+    .then(results => {
+      const face = results.FaceDetails && results.FaceDetails[0];
+      return getEmotion(emotion, face && face.Emotions);
+    });
 }
 
 function getEmotion(emotion, emotions = []) {

@@ -1,7 +1,9 @@
 'use strict';
 
-const userService = require('../services/user-service');
-const httpHelper = require('../helpers/http-helpers');
+const httpHelper = require('../helpers/http-helper');
+const dynamoService = require('./dynamo-service');
+const storageService = require('./storage-service');
+const rekognitionService = require('./rekognition-service');
 
 module.exports = async (event, context) => {
   context.callbackWaitsForEmptyLoop = false;
@@ -15,7 +17,10 @@ module.exports = async (event, context) => {
   };
   const photo = body.photo;
 
-  return userService.createUser(user, photo)
-    .then(res => httpHelper.buildHttpResponse(200, { success: true }))
+  return Promise.all([
+    dynamoService.createUser(user),
+    storageService.uploadImage(user.id, photo)
+      .then(() => rekognitionService.addUserFace(user.id)),
+  ]).then(() => httpHelper.buildHttpResponse(200, { success: true }))
     .catch(err => httpHelper.buildErrorResponse(err));
 };

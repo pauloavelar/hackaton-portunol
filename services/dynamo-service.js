@@ -1,18 +1,14 @@
 const AWS = require('aws-sdk');
 const dynamo = new AWS.DynamoDB({
-  region: 'us-east-1',
+  region: process.env.AWS_REGION,
 });
-const converter = AWS.DynamoDB.Converter;
 
-module.exports = {
-  createUser,
-  searchUser,
-};
+module.exports = { createUser, searchUser };
 
 function createUser(user) {
   return dynamo.putItem({
     TableName: process.env.DYNAMO_TABLE,
-    Item: converter.marshall(user),
+    Item: AWS.DynamoDB.Converter.marshall(user),
   }).promise();
 }
 
@@ -20,15 +16,12 @@ function searchUser(userId) {
   return dynamo.getItem({
     TableName: process.env.DYNAMO_TABLE,
     Key: {
-      id: {
-        S: userId,
-      },
+      id: { S: userId },
     },
   }).promise()
-  .then(user => {
-    if (user && user.Item) {
-      return converter.unmarshall(user.Item);
-    }
-  });
+    .then(user => {
+      if (user && user.Item) {
+        return AWS.DynamoDB.Converter.unmarshall(user.Item);
+      }
+    });
 }
-

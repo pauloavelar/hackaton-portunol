@@ -1,6 +1,6 @@
 'use strict';
 
-const httpHelper = require('../helpers/http-helpers');
+const httpHelper = require('../helpers/http-helper');
 const rekognitionService = require('../services/rekognition-service');
 
 module.exports = async (event, context) => {

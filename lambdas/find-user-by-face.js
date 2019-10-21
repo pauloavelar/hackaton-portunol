@@ -1,6 +1,6 @@
 'use strict';
 
-const httpHelper = require('../helpers/http-helpers');
+const httpHelper = require('../helpers/http-helper');
 const dynamoService = require('../services/dynamo-service');
 const storageService = require('../services/storage-service');
 const rekognitionService = require('../services/rekognition-service');
